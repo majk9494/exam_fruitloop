@@ -1,5 +1,6 @@
 import random
 
+
 class Grid:
     """Representerar spelplanen. Du kan ändra standardstorleken och tecknen för olika rutor. """
     width = 36
@@ -53,6 +54,14 @@ class Grid:
             self.set(j, 0, self.wall)
             self.set(j, self.height - 1, self.wall)
 
+    def random_walls(self, amount):
+        """Skapa slumpmässiga väggar inne i spelplanen"""               # Nya väggar, random walls
+        for _ in range(amount):
+            x = random.randint(1, self.width - 2)
+            y = random.randint(1, self.height - 2)
+        # Placera bara vägg om rutan är tom
+            if self.is_empty(x, y):
+                self.set(x, y, self.wall)
 
     # Används i filen pickups.py
     def get_random_x(self):
