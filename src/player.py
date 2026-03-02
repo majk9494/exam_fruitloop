@@ -1,3 +1,4 @@
+
 class Player:
     marker = "@"
 
@@ -12,8 +13,13 @@ class Player:
         """Flyttar spelaren.\n
         dx = horisontell förflyttning, från vänster till höger\n
         dy = vertikal förflyttning, uppifrån och ned"""
+        if (dx > 1 and dx < g.width -2) or (dy > 1 and dy < g.height -2):
+            self.pos_x += dx
+            self.pos_y += dy
+
         self.pos_x += dx
         self.pos_y += dy
+
 
     def can_move(self, x, y, grid):
 

@@ -3,7 +3,6 @@ from .player import Player
 from . import pickups
 
 
-
 player = Player(2, 1)
 score = 0
 inventory = []
@@ -11,7 +10,7 @@ inventory = []
 g = Grid()
 g.set_player(player)
 g.make_walls()
-g.random_walls(20)
+#g.random_walls(20)
 pickups.randomize(g)
 
 start_x = g.width // 2
@@ -41,7 +40,7 @@ while not command.casefold() in ["q", "x"]:
         "a": (-1, 0),
         "d": (1, 0)
     }
-
+    
     # 🔹 INVENTORY
     if command == "i":
         print("Inventory:")
