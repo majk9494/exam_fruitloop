@@ -1,29 +1,29 @@
-
 class Player:
-    marker = "@"
-
-
     def __init__(self, x, y):
         self.pos_x = x
         self.pos_y = y
-        self.inventory = []  # <-- här sparas alla pickups
 
-    # Flyttar spelaren. "dx" och "dy" är skillnaden
-    def move(self, dx, dy, grid):
-        """Flyttar spelaren.\n
-        dx = horisontell förflyttning, från vänster till höger\n
-        dy = vertikal förflyttning, uppifrån och ned"""
-        if (dx > 1 and dx < g.width -2) or (dy > 1 and dy < g.height -2):
-            self.pos_x += dx
-            self.pos_y += dy
-
+    def move(self, dx, dy):
         self.pos_x += dx
         self.pos_y += dy
 
+    # Kontrollerar om spelaren får röra sig
+    def can_move(self, dx, dy, grid, inventory):
+        new_x = self.pos_x + dx
+        new_y = self.pos_y + dy
 
-    def can_move(self, x, y, grid):
+        target = grid.get(new_x, new_y)
+
+        # Om det är en vägg
+        if target == grid.wall:
+
+            # Om spelaren har en spade
+            if "shovel" in inventory:
+                inventory.remove("shovel")      # Spaden förbrukas
+                grid.clear(new_x, new_y)       # Ta bort väggen
+                print("You broke a wall using the shovel!")
+                return True
+
+            return False  # Ingen spade = kan inte gå
 
         return True
-        #TODO: returnera True om det inte står något i vägen
-
-

@@ -2,70 +2,114 @@ from .grid import Grid
 from .player import Player
 from . import pickups
 
-
-player = Player(2, 1)
-score = 0
-inventory = []
-
 g = Grid()
+player = Player(g.width // 2, g.height // 2)
+
 g.set_player(player)
 g.make_walls()
-#g.random_walls(20)
 pickups.randomize(g)
 
-start_x = g.width // 2
-start_y = g.height // 2
-player = Player(start_x, start_y)
-g.set_player(player)
+score = 0
+inventory = []
+moves = 0
 
-# TODO: flytta denna till en annan fil
-def print_status(game_grid):
-    """Visa spelvärlden och antal poäng."""
-    print("--------------------------------------")
-    print(f"You have {score} points.")
-    print(game_grid)
+# Hur många originalfrukter finns?
+remaining_fruits = len(pickups.original_fruits)
 
-command = "a"
 
-# Loopa tills användaren trycker Q eller X.
-while not command.casefold() in ["q", "x"]:
-    print_status(g)
+def print_status():
+    print("--------------------------------")
+    print(f"Score: {score}")
+    print(f"Inventory: {inventory}")
+    print(g)
 
-    command = input("Use WASD to move, I for inventory, Q/X to quit. ")
-    command = command.casefold()[:1]
 
-    directions = {
-        "w": (0, -1),
-        "s": (0, 1),
-        "a": (-1, 0),
-        "d": (1, 0)
-    }
-    
-    # 🔹 INVENTORY
-    if command == "i":
-        print("Inventory:")
-        if not inventory:
-            print("  (empty)")
-        else:
-            for item in inventory:
-                print(f"  - {item.name} (+{item.value} points)")
-        continue   # hoppa över resten av loopen
+def handle_move(dx, dy):
+    global score, moves, remaining_fruits
 
-    # 🔹 RÖRELSE
-    if command in directions:
-        dx, dy = directions[command]
+    if player.can_move(dx, dy, g, inventory):
 
-        if player.can_move(dx, dy, g):
+        new_x = player.pos_x + dx
+        new_y = player.pos_y + dy
+        target = g.get(new_x, new_y)
 
-            maybe_item = g.get(player.pos_x + dx, player.pos_y + dy)
+        # Flytta spelaren
+        player.move(dx, dy)
 
-            player.move(dx, dy, g)
+        score -= 1   # Lava-golv
+        moves += 1
 
-            if isinstance(maybe_item, pickups.Item):
-                score += maybe_item.value
-                inventory.append(maybe_item)
-                print(f"You found a {maybe_item.name}, +{maybe_item.value} points.")
-                g.clear(player.pos_x, player.pos_y)
 
-# Hit kommer vi när while-loopen slutar
-print("Thank you for playing!")
+        # Fälla
+        if isinstance(target, pickups.Trap):
+            score -= 10
+            print("You stepped on a trap! -10 points")
+
+
+        # Kista
+        elif isinstance(target, pickups.Chest):
+            if "key" in inventory:
+                inventory.remove("key")
+                score += 100
+                print("You opened a chest! +100 points")
+                g.clear(new_x, new_y)
+            else:
+                print("You need a key!")
+
+
+        # Item
+        elif isinstance(target, pickups.Item):
+
+            # EXIT
+            if target.name == "exit":
+                if remaining_fruits == 0:
+                    print("YOU WIN! 🎉")
+                    exit()
+                else:
+                    print("Collect all fruits first!")
+                    return
+
+            # Lägg till i inventory
+            inventory.append(target.name)
+            score += target.value
+            print(f"You picked up {target.name}")
+
+            g.clear(new_x, new_y)
+
+            # Om det var en originalfrukt
+            if target.name in [f.name for f in pickups.original_fruits]:
+                remaining_fruits -= 1
+
+
+        # Bördig jord (var 25:e drag)
+        if moves % 25 == 0:
+            pickups.spawn_random_fruit(g)
+            print("New fruit has grown!")
+
+
+# Huvudloop
+command = ""
+
+while command != "q":
+    print_status()
+    command = input("WASD, J+WASD to jump, Q to quit: ").lower()
+
+    # Jump-system
+    jump = False
+    if command.startswith("j") and len(command) > 1:
+        jump = True
+        command = command[1]
+
+    steps = 2 if jump else 1
+
+    for _ in range(steps):
+        if command == "w":
+            handle_move(0, -1)
+        elif command == "s":
+            handle_move(0, 1)
+        elif command == "a":
+            handle_move(-1, 0)
+        elif command == "d":
+            handle_move(1, 0)
+
+print("Game over")
