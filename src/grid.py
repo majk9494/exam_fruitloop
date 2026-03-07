@@ -31,7 +31,7 @@ class Grid:
         for y in range(len(self.data)):
             for x in range(len(self.data[y])):
                 if x == self.player.pos_x and y == self.player.pos_y:
-                    xs += "@"
+                    xs += "️🧍"
                 else:
                     xs += str(self.data[y][x])
             xs += "\n"

@@ -19,7 +19,7 @@ class Trap:
 
 
 
-# Kista
+# Kista/Chest
 class Chest:
     def __str__(self):
         return "C"
