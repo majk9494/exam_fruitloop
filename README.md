@@ -1,5 +1,37 @@
 # Examination
+Hej!
+Namn:
+Mikael Backlund Rova
+Här är länken till min Examination på github:
+https://github.com/majk9494/exam_fruitloop.git
 
+Jag har gjort version 1 och 2 av spelet.
+Kraven jag jobbat med är dessa:
+Version 1 - grundkrav
+A. Spelaren ska börja nära mitten av rummet.
+B. Förflyttningar i alla 4 riktningar. (Med tangenterna WASD.)
+C. Man ska inte kunna gå igenom väggar.
+D. Fruktsallad - alla frukter ska vara värda 20 poäng i stället för 10.
+E. Inventory - alla saker som man plockar upp ska sparas i en lista.
+F. Nytt kommando: "i", skriver ut innehållet i spelarens inventory.
+G. The floor is lava - för varje steg man går ska man tappa 1 poäng.
+H. Använd for-loopar för att skapa flera, sammanhängande väggar på kartan. Se till att det inte skapas några rum som man inte kan komma in i. Gör detta i filen grid.py.
+
+Version 2 - nice to have
+I. Fällor - introducera valfri fälla till spelplanen. Om man går på en ruta med en fälla ska man förlora 10 poäng. Fällan ska ligga kvar så att man kan falla i den flera gånger.
+J. Spade - en ny sak man kan plocka upp. När man går in i en vägg nästa gång, förbrukas spaden för att ta bort väggen.
+K. Nycklar och kistor - slumpa minst en nyckel och lika många kistor på spelplanen. När man går på en ruta med en nyckel plockar man upp den i sitt inventory. Om man kommer till en kista och har minst en nyckel, öppnar man kistan och plockar upp en skatt som är värd 100 poäng. (Nyckeln är förbrukad.)
+L. Bördig jord - efter varje 25:e drag skapas en ny frukt/grönsak någonstans på kartan.
+M. Exit - slumpa ett "E" på kartan. När man har plockat upp alla ursprungliga saker, kan man gå till exit för att vinna spelet. Men innan man tagit upp alla har inte Exit någon effekt.
+N. Jump - om man skriver ett "J" innan något av "WASD", ska spelaren hoppa över en ruta. (Exempel: "JW" → två steg uppåt.) Man förflyttar sig alltså två steg, men kan förstås bara plocka upp eller interagera med saker där man landar. Hoppar man in i en vägg blir det samma effekt som om man hade gått ett steg på vanligt sätt.
+
+Mina filer är:
+game.py
+grid.py
+pickups.py
+player.py
+
+Mikael Backlund Rova
 Individuell examinationsuppgift i kursen Programmering med Python.
 
 Börja läs igenom game.py - det är där projektet startas.
